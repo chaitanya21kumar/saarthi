@@ -1,4 +1,4 @@
-// /voice — greet + gather (speech or any key) -> /analyze
+// /voice — greet + gather (speech or DTMF) -> /analyze
 exports.handler = async function (context, event, callback) {
     const twiml = new Twilio.twiml.VoiceResponse();
     const analyzeUrl = `https://${context.DOMAIN_NAME}/analyze`;
@@ -14,12 +14,12 @@ exports.handler = async function (context, event, callback) {
     });
   
     g.say(
-      { voice: 'alice' },
-      'Namaste! This is Saarthee, your E M I reminder demo. ' +
-      'Please say how you feel about your upcoming payment, or press any key.'
+      { voice: 'Polly.Aditi', language: 'en-IN' },
+      'Namaste. This is Saarthi—your friendly E M I reminder. '
+      + 'You can say “I want to pay” or “I need more time”. '
+      + 'Or press 1 to pay now, press 2 to request more time, press 3 if you cannot pay.'
     );
   
-    // If no input in time, Twilio posts to /analyze because actionOnEmptyResult = true
     return callback(null, twiml);
   };
   

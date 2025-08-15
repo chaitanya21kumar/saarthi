@@ -5,14 +5,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "twilio-run",
-    "deploy": "twilio-run deploy",
+    "deploy": "twilio serverless:deploy",
     "call": "node scripts/call.js",
-    "logs": "open https://console.twilio.com/us1/develop/functions/editor/ZS421f67a5761c6e90d2212cee06789d11/environment/ZE32b28159f93c6838f45f86e1d0ce0376"
+    "logs": "twilio serverless:logs --environment dev --tail"
   },
   "dependencies": {
     "@twilio/runtime-handler": "1.2.1",
-    "twilio": "5.8.0",
-    "dotenv": "16.4.5"
+    "dotenv": "16.4.5",
+    "twilio": "5.8.0"
   },
   "devDependencies": {
     "twilio-run": "^4.2.0"
