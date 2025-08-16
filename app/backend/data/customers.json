@@ -1,0 +1,37 @@
+[
+  {
+    "id": "c1",
+    "name": "Chaitanya",
+    "phone": "+917869711689",
+    "due_date": "2025-08-20",
+    "amount": 2300,
+    "score": 0.85,
+    "status": "called",
+    "last_contact": "2025-08-16T21:14:19.771Z",
+    "next_action": "call"
+  },
+  {
+    "id": "c2",
+    "name": "Asha (Demo)",
+    "phone": "+919876543210",
+    "due_date": "2025-08-18",
+    "amount": 1800,
+    "score": 0.6,
+    "status": "done",
+    "last_contact": "2025-08-16T21:02:48.707Z",
+    "next_action": "call",
+    "demo": true
+  },
+  {
+    "id": "c3",
+    "name": "Ravi (Demo)",
+    "phone": "+919812345678",
+    "due_date": "2025-08-19",
+    "amount": 3200,
+    "score": 0.72,
+    "status": "done",
+    "last_contact": "2025-08-16T21:03:10.540Z",
+    "next_action": "call",
+    "demo": true
+  }
+]

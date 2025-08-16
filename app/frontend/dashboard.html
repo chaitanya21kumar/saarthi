@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <title>Saarthi · Agentic Collections Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    *{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    body{
+      background:
+        radial-gradient(1000px 500px at 10% -10%, rgba(99,102,241,.12), transparent 50%),
+        radial-gradient(800px 400px at 90% 0%, rgba(16,185,129,.12), transparent 50%),
+        linear-gradient(180deg, #f8fafc, #f1f5f9);
+      min-height:100vh;
+    }
+    .glass{ backdrop-filter: blur(10px); background: rgba(255,255,255,.65);}
+    .shadow-soft{ box-shadow:0 10px 30px rgba(2,6,23,.08), inset 0 1px 0 rgba(255,255,255,.6);}
+    .badge{ @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium }
+    .kicker{ @apply text-[10px] uppercase tracking-wider text-slate-500 }
+    .metric{ @apply text-3xl font-extrabold leading-none }
+    .card{ @apply glass shadow-soft rounded-2xl p-5 }
+    .btn{ @apply px-3 py-2 rounded-xl border bg-white/70 hover:bg-white transition }
+    .pill{ @apply px-3 py-1 rounded-full border bg-white/70 }
+    .table-head{ @apply bg-slate-100/70 }
+  </style>
+</head>
+<body class="text-slate-900">
+
+  <!-- Masthead -->
+  <header class="max-w-7xl mx-auto pt-8 px-6">
+    <div class="flex flex-wrap items-start justify-between gap-6">
+      <div>
+        <h1 class="text-4xl font-extrabold tracking-tight">
+          <span class="bg-gradient-to-r from-indigo-600 via-emerald-600 to-indigo-600 bg-clip-text text-transparent">
+            Saarthi — Agentic Collections Studio
+          </span>
+        </h1>
+        <p class="text-sm text-slate-600 mt-2">
+          Multilingual AI VoiceBot for EMI collections — auto-prioritize, auto-dial, WhatsApp follow-ups.
+        </p>
+        <div class="flex items-center gap-3 mt-3">
+          <span class="kicker flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Live
+          </span>
+          <span id="hdr_agent" class="badge bg-slate-200 text-slate-800">Agent: —</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btnRefresh" class="btn">Refresh</button>
+        <button id="btnExport"  class="btn">Export CSV</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-6 space-y-6">
+
+    <!-- KPI row -->
+    <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="activity" class="w-3.5 h-3.5"></i> Total events</div>
+        <div id="m_total" class="metric">—</div>
+      </div>
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="phone-call" class="w-3.5 h-3.5"></i> Calls (voice)</div>
+        <div id="m_calls" class="metric">—</div>
+      </div>
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="mic" class="w-3.5 h-3.5"></i> Voice intents</div>
+        <div id="m_voice" class="metric">—</div>
+      </div>
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="message-square" class="w-3.5 h-3.5"></i> WA inbound</div>
+        <div id="m_wa" class="metric">—</div>
+      </div>
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Pay now</div>
+        <div id="m_pay" class="metric text-emerald-600">—</div>
+      </div>
+      <div class="card">
+        <div class="kicker flex items-center gap-2"><i data-lucide="clock-4" class="w-3.5 h-3.5"></i> Need time / Cannot</div>
+        <div id="m_time" class="metric text-amber-600">—</div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="card col-span-1">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold">Intent distribution (last 200)</h3>
+          <span class="pill text-xs" id="lastSync">—</span>
+        </div>
+        <canvas id="chartIntent" height="220"></canvas>
+      </div>
+      <div class="card col-span-1">
+        <h3 class="text-lg font-semibold mb-3">Sentiment</h3>
+        <canvas id="chartSent" height="220"></canvas>
+      </div>
+      <div class="card col-span-1">
+        <h3 class="text-lg font-semibold mb-3">Live Notes</h3>
+        <ul id="feed" class="space-y-2 max-h-[260px] overflow-auto pr-1"></ul>
+      </div>
+    </section>
+
+    <!-- Campaign Runner -->
+    <section class="card">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold">Agentic campaign</h3>
+          <p class="text-xs text-slate-600 mt-1">Auto-picks next customer by due date & score, then dials or simulates on trial.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="flex items-center gap-2 text-sm">
+            <input id="camp_demo" type="checkbox" class="w-4 h-4" checked>
+            Demo mode (simulate non-verified)
+          </label>
+          <select id="camp_every" class="px-3 py-2 rounded-xl border bg-white/70">
+            <option value="5000">Every 5s</option>
+            <option value="10000" selected>Every 10s</option>
+            <option value="15000">Every 15s</option>
+            <option value="30000">Every 30s</option>
+            <option value="60000">Every 60s</option>
+          </select>
+          <button id="camp_start" class="btn">Start</button>
+          <button id="camp_stop"  class="btn">Stop</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+        <div class="glass rounded-xl p-4">
+          <div class="kicker">Status</div>
+          <div id="camp_status" class="text-xl font-bold">—</div>
+        </div>
+        <div class="glass rounded-xl p-4">
+          <div class="kicker">Counts</div>
+          <div id="camp_counts" class="text-sm">—</div>
+        </div>
+        <div class="glass rounded-xl p-4 md:col-span-2">
+          <div class="kicker">Next up</div>
+          <div id="camp_next" class="text-sm">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="card">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Quick call</h3>
+          <div class="flex items-center gap-2">
+            <input id="ac_phone" class="w-full px-3 py-2 rounded-xl border bg-white/70" placeholder="+91XXXXXXXXXX (verified on trial)">
+            <button id="ac_call" class="btn">Place Call</button>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">Uses your Twilio voice number and <code>/voice</code> webhook.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Send WhatsApp</h3>
+          <div class="flex items-center gap-2">
+            <input id="aw_phone" class="w-48 px-3 py-2 rounded-xl border bg-white/70" placeholder="+91…">
+            <input id="aw_body"  class="grow px-3 py-2 rounded-xl border bg-white/70" placeholder="Message text">
+            <button id="aw_send" class="btn">Send</button>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">From your sandbox number <code>whatsapp:+14155238886</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="card">
+      <div class="flex flex-wrap items-end gap-3">
+        <div class="grow">
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Search (phone or text)</label>
+          <input id="q" class="w-full px-3 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-indigo-500 bg-white/70" placeholder="e.g. +9178… or paid today">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Type</label>
+          <select id="f_type" class="px-3 py-2 rounded-xl border bg-white/70">
+            <option value="">All</option>
+            <option>voice_analyze</option>
+            <option>wa_inbound</option>
+            <option>voice_status</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Intent</label>
+          <select id="f_intent" class="px-3 py-2 rounded-xl border bg-white/70">
+            <option value="">All</option>
+            <option>pay_now</option>
+            <option>need_time</option>
+            <option>cannot_pay</option>
+            <option>other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Sentiment</label>
+          <select id="f_sent" class="px-3 py-2 rounded-xl border bg-white/70">
+            <option value="">All</option>
+            <option>positive</option>
+            <option>neutral</option>
+            <option>negative</option>
+          </select>
+        </div>
+        <button id="btnClear" class="btn">Clear</button>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="card">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xl font-semibold">Timeline</h2>
+        <div class="text-xs text-slate-600" id="counter">—</div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="table-head">
+            <tr>
+              <th class="text-left p-2">Time</th>
+              <th class="text-left p-2">Type</th>
+              <th class="text-left p-2">Phone</th>
+              <th class="text-left p-2">Text / Intent</th>
+              <th class="text-left p-2">Sentiment</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ---- helpers ----
+    const rowsEl = document.getElementById('rows');
+    const lastSync = document.getElementById('lastSync');
+    const feed = document.getElementById('feed');
+    const qEl = document.getElementById('q');
+    const fType = document.getElementById('f_type');
+    const fIntent = document.getElementById('f_intent');
+    const fSent = document.getElementById('f_sent');
+    const m = id => document.getElementById(id);
+    const rel = ts => { const d=new Date(ts); const s=(Date.now()-d)/1000; if(isNaN(s))return ts; if(s<60)return Math.floor(s)+'s ago'; if(s<3600)return Math.floor(s/60)+'m ago'; return Math.floor(s/3600)+'h ago'; };
+    const tz = ts => { try { return new Date(ts).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }); } catch { return ts } };
+    const badge = (txt, tone) => {
+      const map = { blue:'bg-blue-100 text-blue-700', green:'bg-emerald-100 text-emerald-700',
+        amber:'bg-amber-100 text-amber-700', red:'bg-rose-100 text-rose-700', gray:'bg-slate-200 text-slate-700', indigo:'bg-indigo-100 text-indigo-700' };
+      return `<span class="badge ${map[tone]||map.gray}">${txt}</span>`;
+    };
+
+    let all = [];   // all events
+    let view = [];  // filtered
+
+    // ---- charts ----
+    let intentChart, sentChart;
+    function ensureCharts() {
+      if (!intentChart) {
+        intentChart = new Chart(document.getElementById('chartIntent'), {
+          type: 'doughnut',
+          data: { labels: ['pay_now','need_time','cannot_pay','other'], datasets: [{ data:[0,0,0,0] }] },
+          options: { plugins:{ legend:{ position:'bottom' }}, cutout:'65%' }
+        });
+      }
+      if (!sentChart) {
+        sentChart = new Chart(document.getElementById('chartSent'), {
+          type: 'bar',
+          data: { labels:['positive','neutral','negative'], datasets:[{ data:[0,0,0] }] },
+          options: { indexAxis:'y', plugins:{ legend:{ display:false }}, scales:{ x:{ beginAtZero:true } } }
+        });
+      }
+    }
+    function updateCharts() {
+      ensureCharts();
+      const last = all.slice(-200);
+      const count = k => last.filter(e => (e.intent||'')===k).length;
+      const sent  = k => last.filter(e => (e.sentiment||'')===k).length;
+      intentChart.data.datasets[0].data = ['pay_now','need_time','cannot_pay','other'].map(count);
+      intentChart.update('none');
+      sentChart.data.datasets[0].data = ['positive','neutral','negative'].map(sent);
+      sentChart.update('none');
+      lastSync.textContent = 'Synced ' + new Date().toLocaleTimeString();
+    }
+
+    function computeMetrics(evts){
+      const total = evts.length;
+      const calls = evts.filter(e=>e.type==='voice_status').length;
+      const voice = evts.filter(e=>e.type==='voice_analyze').length;
+      const wa    = evts.filter(e=>e.type==='wa_inbound').length;
+      const pay   = evts.filter(e=>(e.intent||'')==='pay_now').length;
+      const need  = evts.filter(e=>['need_time','cannot_pay'].includes(e.intent||'')).length;
+      m('m_total').textContent = total;
+      m('m_calls').textContent = calls;
+      m('m_voice').textContent = voice;
+      m('m_wa').textContent    = wa;
+      m('m_pay').textContent   = pay;
+      m('m_time').textContent  = need;
+      document.getElementById('counter').textContent = `${evts.length} rows`;
+    }
+
+    function applyFilters(){
+      const q = qEl.value.trim().toLowerCase();
+      const t = fType.value, i=fIntent.value, s=fSent.value;
+      view = all.filter(e=>{
+        if (t && e.type!==t) return false;
+        if (i && (e.intent||'')!==i) return false;
+        if (s && (e.sentiment||'')!==s) return false;
+        if (!q) return true;
+        const hay = [e.from,e.callee,e.caller,e.body,e.speech,e.intent,e.sentiment].map(x=>String(x||'').toLowerCase()).join(' ');
+        return hay.includes(q);
+      });
+      render();
+    }
+
+    function render(){
+      computeMetrics(view);
+      updateCharts();
+
+      rowsEl.innerHTML = '';
+      const data = [...view].sort((a,b)=> (new Date(b.ts||b.recvTs)) - (new Date(a.ts||a.recvTs))).slice(0,500);
+
+      for (const e of data){
+        const ts = e.ts || e.recvTs || '';
+        theWho = e.from || e.callee || e.caller || '';
+        const who = theWho;
+        const what = e.type==='wa_inbound' ? (e.body || '')
+                   : e.type==='voice_analyze' ? `${e.intent||''}${e.speech? ' / ' + e.speech : ''}`
+                   : (e.callStatus || e.CallStatus || '—');
+
+        const typeBadge =
+          e.type==='voice_analyze' ? badge('voice','indigo') :
+          e.type==='wa_inbound'    ? badge('whatsapp','green') :
+                                     badge('status','gray');
+
+        const sentBadge =
+          (e.sentiment==='positive') ? badge('positive','green') :
+          (e.sentiment==='negative') ? badge('negative','red') :
+          (e.sentiment==='neutral')  ? badge('neutral','gray') : '';
+
+        const intentBadge =
+          (e.intent==='pay_now')     ? badge('pay_now','green') :
+          (e.intent==='need_time')   ? badge('need_time','amber') :
+          (e.intent==='cannot_pay')  ? badge('cannot_pay','red') :
+          (e.intent==='other')       ? badge('other','gray') : '';
+
+        rowsEl.insertAdjacentHTML('beforeend', `
+          <tr class="border-b hover:bg-white/70 transition">
+            <td class="p-2 whitespace-nowrap">
+              <div class="font-medium">${tz(ts)}</div>
+              <div class="text-xs text-slate-500">${rel(ts)}</div>
+            </td>
+            <td class="p-2">${typeBadge}</td>
+            <td class="p-2">
+              <div class="flex items-center gap-2">
+                <code class="text-slate-700">${who||'—'}</code>
+                ${who ? `<button class="text-xs px-2 py-0.5 rounded-lg border"
+                         onclick="navigator.clipboard.writeText('${who}')">Copy</button>` : ''}
+              </div>
+            </td>
+            <td class="p-2">
+              <div class="mb-1 truncate max-w-[42rem]">${(what||'—').replace(/</g,'&lt;')}</div>
+              <div class="flex flex-wrap gap-1">${intentBadge}</div>
+            </td>
+          <td class="p-2">${sentBadge||'—'}</td>
+          </tr>
+        `);
+      }
+    }
+
+    // ---- Live stream (SSE) with polling fallback ----
+    let booted = false;
+    function pushFeed(e){
+      const line = document.createElement('li');
+      const t = e.type==='wa_inbound' ? 'whatsapp' : (e.type==='voice_analyze' ? 'voice' : 'status');
+      const txt = e.type==='wa_inbound' ? (e.body||'') : (e.intent||e.callStatus||'');
+      line.className = 'text-sm';
+      line.innerHTML = `<span class="mr-2 text-slate-500">${t}</span> <span class="font-medium">${(e.from||e.caller||e.callee||'').replace('whatsapp:','')}</span> · ${txt}`;
+      feed.prepend(line);
+      while (feed.childElementCount > 12) feed.lastChild.remove();
+    }
+
+    function connectSSE(){
+      try {
+        const es = new EventSource('/stream');
+        es.addEventListener('boot', (ev)=>{
+          all = JSON.parse(ev.data||'[]'); booted = true; view = all; render();
+        });
+        es.addEventListener('event', (ev)=>{
+          const e = JSON.parse(ev.data||'{}'); all.push(e); while (all.length>1000) all.shift(); pushFeed(e); applyFilters();
+        });
+        es.onerror = ()=> { es.close(); setTimeout(connectSSE, 3000); };
+      } catch { setInterval(fetchEvents, 3000); }
+    }
+
+    async function fetchEvents(){
+      const r = await fetch('/api/events', { cache:'no-store' });
+      const arr = await r.json(); all = Array.isArray(arr) ? arr : []; view = all; render();
+    }
+
+    // ---- Dashboard actions ----
+    document.getElementById('btnRefresh').onclick = fetchEvents;
+    document.getElementById('btnClear').onclick = ()=>{ qEl.value=''; fType.value=''; fIntent.value=''; fSent.value=''; applyFilters(); };
+    [qEl,fType,fIntent,fSent].forEach(el=> el.addEventListener('input', applyFilters));
+    document.getElementById('btnExport').onclick = ()=>{
+      const keys = ['type','ts','recvTs','from','caller','callee','body','speech','digits','intent','sentiment','callStatus'];
+      const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+      const rows = [keys.join(',')].concat(view.map(e=>keys.map(k=>esc(e[k])).join(',')));
+      const blob = new Blob([rows.join('\n')], { type:'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'saarthi-events.csv'; a.click(); URL.revokeObjectURL(url);
+    };
+
+    // ---- Quick actions (call/WA) ----
+    const acPhone = document.getElementById('ac_phone');
+    const acBtn   = document.getElementById('ac_call');
+    const awPhone = document.getElementById('aw_phone');
+    const awBody  = document.getElementById('aw_body');
+    const awBtn   = document.getElementById('aw_send');
+
+    acBtn.onclick = async () => {
+      const to = acPhone.value.trim(); if (!to) return alert('Enter phone (E.164). On trial it must be verified.');
+      const r = await fetch('/api/call', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ to }) });
+      const j = await r.json(); if (!j.ok) return alert('Call failed: ' + (j.error||'')); acPhone.value = '';
+    };
+    awBtn.onclick = async () => {
+      const to = awPhone.value.trim(); const body = awBody.value.trim(); if (!to || !body) return alert('Enter phone and message');
+      const r = await fetch('/api/wa', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ to, body }) });
+      const j = await r.json(); if (!j.ok) return alert('Send failed: ' + (j.error||'')); awBody.value = '';
+    };
+
+    // ---- Campaign UI ----
+    const campDemo   = document.getElementById('camp_demo');
+    const campEvery  = document.getElementById('camp_every');
+    const campStart  = document.getElementById('camp_start');
+    const campStop   = document.getElementById('camp_stop');
+    const campStatus = document.getElementById('camp_status');
+    const campCounts = document.getElementById('camp_counts');
+    const campNext   = document.getElementById('camp_next');
+    const hdrAgent   = document.getElementById('hdr_agent');
+
+    async function refreshCampaign(){
+      const r = await fetch('/api/campaign/status', { cache:'no-store' });
+      const j = await r.json();
+      campStatus.textContent = j.running ? 'Running' : 'Stopped';
+      hdrAgent.textContent   = j.running ? 'Agent: Running' : 'Agent: Stopped';
+      hdrAgent.className     = 'badge ' + (j.running ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-800');
+      campDemo.checked = !!j.demo;
+      campEvery.value = String(j.intervalMs || 10000);
+      const c = j.counts || {};
+      campCounts.textContent = `total ${c.total||0} · queued ${c.queued||0} · called ${c.called||0} · done ${c.done||0}`;
+      if (j.next){
+        const due = j.next.due_date ? new Date(j.next.due_date).toLocaleDateString('en-IN') : '—';
+        campNext.textContent = `${j.next.name}  ${j.next.phone}  | due ${due} · ₹${j.next.amount} · priority ${j.next.priority?.toFixed?.(2)}`;
+      } else {
+        campNext.textContent = '—';
+      }
+    }
+
+    campStart.onclick = async ()=>{
+      const body = { demo: campDemo.checked, intervalMs: Number(campEvery.value||10000) };
+      await fetch('/api/campaign/start', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+      setTimeout(refreshCampaign, 300);
+    };
+    campStop.onclick = async ()=>{
+      await fetch('/api/campaign/stop', { method:'POST' });
+      setTimeout(refreshCampaign, 300);
+    };
+
+    // init
+    connectSSE();
+    setTimeout(()=>{ if (!booted) fetchEvents(); }, 1500);
+    setInterval(refreshCampaign, 3000);
+    window.addEventListener('load', ()=> { lucide.createIcons(); refreshCampaign(); });
+  </script>
+</body>
+</html>

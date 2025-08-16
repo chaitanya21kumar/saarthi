@@ -1,0 +1,259 @@
+[
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:21:16.496Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:21:17.658Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:21:25.248Z"
+  },
+  {
+    "type": "voice_analyze",
+    "ts": "2025-08-16T20:21:48.264Z",
+    "caller": "+14062984261",
+    "callee": "+917869711689",
+    "speech": "I need more time, actually.",
+    "digits": "",
+    "intent": "need_time",
+    "sentiment": "negative",
+    "recvTs": "2025-08-16T20:21:48.693Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:21:55.585Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T20:27:02.214Z",
+    "from": "whatsapp:+917869711689",
+    "body": "I want to pay",
+    "intent": "pay_now",
+    "sentiment": "positive",
+    "recvTs": "2025-08-16T20:27:02.650Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T20:27:15.230Z",
+    "from": "whatsapp:+917869711689",
+    "body": "AGENT",
+    "intent": "other",
+    "sentiment": "neutral",
+    "recvTs": "2025-08-16T20:27:15.609Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:30:03.609Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:30:05.050Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:30:14.833Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:30:54.211Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:31:03.159Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:31:04.301Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:31:10.293Z"
+  },
+  {
+    "type": "voice_analyze",
+    "ts": "2025-08-16T20:31:34.238Z",
+    "caller": "+14062984261",
+    "callee": "+917869711689",
+    "speech": "I want to pay.",
+    "digits": "",
+    "intent": "pay_now",
+    "sentiment": "positive",
+    "recvTs": "2025-08-16T20:31:34.650Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:31:41.576Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T20:31:51.200Z",
+    "from": "whatsapp:+917869711689",
+    "body": "Need extension",
+    "intent": "need_time",
+    "sentiment": "negative",
+    "recvTs": "2025-08-16T20:31:51.619Z"
+  },
+  {
+    "type": "voice_status",
+    "action": "dashboard_call",
+    "CallSid": "CA0338bcbad262e857f042c10af9c84594",
+    "to": "+917869711689",
+    "ts": "2025-08-16T20:50:32.274Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:50:32.549Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:50:33.808Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:50:43.492Z"
+  },
+  {
+    "type": "voice_analyze",
+    "ts": "2025-08-16T20:50:55.677Z",
+    "caller": "+14062984261",
+    "callee": "+917869711689",
+    "speech": "I want to pay.",
+    "digits": "",
+    "intent": "pay_now",
+    "sentiment": "positive",
+    "recvTs": "2025-08-16T20:50:56.098Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T20:51:02.974Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T20:52:09.283Z",
+    "from": "whatsapp:+917869711689",
+    "body": "I can pay",
+    "intent": "pay_now",
+    "sentiment": "positive",
+    "recvTs": "2025-08-16T20:52:09.720Z"
+  },
+  {
+    "type": "wa_inbound",
+    "from": "whatsapp:+917869711689",
+    "body": "hi",
+    "ts": "2025-08-16T20:52:32.748Z",
+    "sentiment": "neutral",
+    "intent": "other",
+    "source": "dashboard_send"
+  },
+  {
+    "type": "wa_inbound",
+    "from": "whatsapp:+917869711689",
+    "body": "all okay ?",
+    "ts": "2025-08-16T20:52:51.435Z",
+    "sentiment": "neutral",
+    "intent": "other",
+    "source": "dashboard_send"
+  },
+  {
+    "type": "voice_analyze",
+    "intent": "need_time",
+    "sentiment": "neutral",
+    "callee": "+919876543210",
+    "speech": "(simulated)",
+    "ts": "2025-08-16T21:02:48.703Z"
+  },
+  {
+    "type": "voice_status",
+    "callStatus": "simulated",
+    "to": "+919876543210",
+    "ts": "2025-08-16T21:02:48.705Z",
+    "source": "campaign"
+  },
+  {
+    "type": "voice_analyze",
+    "intent": "need_time",
+    "sentiment": "neutral",
+    "callee": "+919812345678",
+    "speech": "(simulated)",
+    "ts": "2025-08-16T21:03:10.534Z"
+  },
+  {
+    "type": "voice_status",
+    "callStatus": "simulated",
+    "to": "+919812345678",
+    "ts": "2025-08-16T21:03:10.538Z",
+    "source": "campaign"
+  },
+  {
+    "type": "voice_status",
+    "source": "campaign",
+    "action": "auto_call",
+    "CallSid": "CA393c07119b9337e84e6493fe441e760b",
+    "to": "+917869711689",
+    "ts": "2025-08-16T21:03:31.367Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:03:31.640Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:03:33.010Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:04:04.340Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T21:04:23.916Z",
+    "from": "whatsapp:+917869711689",
+    "body": "Need extension",
+    "intent": "need_time",
+    "sentiment": "negative",
+    "recvTs": "2025-08-16T21:04:24.360Z"
+  },
+  {
+    "type": "wa_inbound",
+    "ts": "2025-08-16T21:04:31.767Z",
+    "from": "whatsapp:+917869711689",
+    "body": "I want to pay",
+    "intent": "pay_now",
+    "sentiment": "positive",
+    "recvTs": "2025-08-16T21:04:32.172Z"
+  },
+  {
+    "type": "voice_status",
+    "source": "campaign",
+    "action": "auto_call",
+    "CallSid": "CA4bf56dbd07de97fb5010438dde92cd6b",
+    "to": "+917869711689",
+    "ts": "2025-08-16T21:14:19.766Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:14:21.163Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:14:29.151Z"
+  },
+  {
+    "type": "voice_analyze",
+    "ts": "2025-08-16T21:14:41.085Z",
+    "caller": "+14062984261",
+    "callee": "+917869711689",
+    "speech": "I need an extension. I cannot pay. I don't want to pay.",
+    "digits": "",
+    "intent": "cannot_pay",
+    "sentiment": "negative",
+    "recvTs": "2025-08-16T21:14:41.531Z"
+  },
+  {
+    "type": "voice_status",
+    "recvTs": "2025-08-16T21:14:48.360Z"
+  }
+]
