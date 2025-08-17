@@ -103,7 +103,7 @@ function startRunner(){ stopRunner(); state.timer=setInterval(tick, state.interv
 
 app.get('/api/campaign/status', async (_req,res)=>{ const list=await readCustomers(); const total=list.length; const queued=list.filter(c=>(c.status||'queued')==='queued').length; const done=list.filter(c=>c.status==='done').length; const called=list.filter(c=>c.status==='called').length; const next=await pickNext();
   res.json({ running:state.running, demo:state.demo, intervalMs:state.intervalMs, counts:{ total, queued, called, done }, next: next?{ id:next.id,name:next.name,phone:next.phone,due_date:next.due_date,amount:next.amount,score:next.score,priority:priority(next)}:null });});
-app.post('/api/campaign/start', async (req,res)=>{ if(typeof req.body?.intervalMs==='number' && req.body.intervalMs>=3000) state.intervalMs=req.body.intervalMs; state.demo=!!req.body?.demo; startRunner(); setTimeout(tick,100); setTimeout(tick,100); res.json({ok:true,running:state.running,intervalMs:state.intervalMs,demo:state.demo}); });
+app.post('/api/campaign/start', async (req,res)=>{ if(typeof req.body?.intervalMs==='number' && req.body.intervalMs>=3000) state.intervalMs=req.body.intervalMs; state.demo=!!req.body?.demo; startRunner(); setTimeout(tick,100); res.json({ok:true,running:state.running,intervalMs:state.intervalMs,demo:state.demo}); });
 app.post('/api/campaign/stop', async (_req,res)=>{ stopRunner(); res.json({ok:true,running:false}); });
 app.post('/api/campaign/reset', async (_req,res)=>{ const list=await readCustomers(); for(const c of list){ c.status='queued'; c.last_contact=null; } await writeCustomers(list); res.json({ok:true}); });
 
@@ -137,24 +137,6 @@ app.get('/api/prompt', (req,res)=>{
 app.get('/', (_req,res)=> res.sendFile(path.join(__dirname,'..','frontend','dashboard.html')));
 app.get('/healthz', (_req,res)=> res.send('ok'));
 
-
-
-// --- Auto-ring: prefer verified number and call immediately on Start ---
-(function(){
-  const COOLDOWN_MS = Number(process.env.PRIORITY_COOLDOWN_MS||120000);
-  const _origPick = pickNext;
-  pickNext = async function(){
-    try{
-      const list = await readCustomers();
-      const e = x=>String(x||'').replace(/[^0-9+]/g,'').replace(/^([0-9])/,'+$1');
-      const verified = (CALLEE_NUMBER||'').trim();
-      const v = list.find(c=> e(c.phone)===e(verified));
-      const recent = c => c && c.last_contact && (Date.now()-Date.parse(c.last_contact) < COOLDOWN_MS);
-      if (v && (v.status||'queued')!=='done' && !recent(v)) return v;
-    }catch{}
-    return _origPick();
-  };
-})();
 
 
 // --- Auto-ring: prefer verified number and call immediately on Start ---

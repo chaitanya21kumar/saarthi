@@ -16,3 +16,17 @@ yarn-error.log*
 .vscode/
 .idea/
 *.log
+
+# --- local secrets ---
+.env
+app/backend/.env
+functions/.env
+
+# --- hardhat build/cache ---
+app/blockchain/artifacts/
+app/blockchain/cache/
+app/blockchain/deployment.json
+
+# --- runtime data ---
+app/backend/data/ledger.json
+app/backend/data/bandit.json

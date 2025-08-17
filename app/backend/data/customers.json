@@ -6,8 +6,8 @@
     "due_date": "2025-08-20",
     "amount": 2300,
     "score": 0.85,
-    "status": "called",
-    "last_contact": "2025-08-16T21:14:19.771Z",
+    "status": "queued",
+    "last_contact": null,
     "next_action": "call"
   },
   {
@@ -18,7 +18,7 @@
     "amount": 1800,
     "score": 0.6,
     "status": "done",
-    "last_contact": "2025-08-16T21:02:48.707Z",
+    "last_contact": null,
     "next_action": "call",
     "demo": true
   },
@@ -30,7 +30,7 @@
     "amount": 3200,
     "score": 0.72,
     "status": "done",
-    "last_contact": "2025-08-16T21:03:10.540Z",
+    "last_contact": null,
     "next_action": "call",
     "demo": true
   }

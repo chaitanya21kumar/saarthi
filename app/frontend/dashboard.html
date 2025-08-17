@@ -25,8 +25,9 @@
     .metric{ @apply text-3xl font-extrabold leading-none }
     .card{ @apply glass shadow-soft rounded-2xl p-5 }
     .btn{ @apply px-3 py-2 rounded-xl border bg-white/70 hover:bg-white transition }
-    .pill{ @apply px-3 py-1 rounded-full border bg-white/70 }
+    .pill{ @apply px-3 py-1 rounded-full border bg-white/70 text-xs font-semibold }
     .table-head{ @apply bg-slate-100/70 }
+    .mono{ font-family: ui-monospace, Menlo, Consolas, monospace; }
   </style>
 </head>
 <body class="text-slate-900">
@@ -50,9 +51,16 @@
           <span id="hdr_agent" class="badge bg-slate-200 text-slate-800">Agent: —</span>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="btnRefresh" class="btn">Refresh</button>
-        <button id="btnExport"  class="btn">Export CSV</button>
+      <div class="flex flex-col items-end gap-2">
+        <div class="flex items-center gap-2">
+          <span id="pill_chain" class="pill">Chain: checking…</span>
+          <span id="pill_contract" class="pill">Contract: —</span>
+          <span id="pill_lang" class="pill">Default Lang: —</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnRefresh" class="btn">Refresh</button>
+          <button id="btnExport"  class="btn">Export CSV</button>
+        </div>
       </div>
     </div>
   </header>
@@ -92,7 +100,7 @@
       <div class="card col-span-1">
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-lg font-semibold">Intent distribution (last 200)</h3>
-          <span class="pill text-xs" id="lastSync">—</span>
+          <span class="pill" id="lastSync">—</span>
         </div>
         <canvas id="chartIntent" height="220"></canvas>
       </div>
@@ -156,7 +164,24 @@
             <button id="ac_call" class="btn">Place Call</button>
           </div>
           <p class="text-xs text-slate-600 mt-2">Uses your Twilio voice number and <code>/voice</code> webhook.</p>
+
+          <!-- Multilingual prompt + one-tap calls -->
+          <div class="mt-4">
+            <h4 class="text-sm font-semibold mb-2">Multilingual</h4>
+            <div class="flex items-center gap-2 mb-2">
+              <select id="lang_sel" class="px-3 py-2 rounded-xl border bg-white/70">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (HI)</option>
+                <option value="ta">தமிழ் (TA)</option>
+                <option value="te">తెలుగు (TE)</option>
+              </select>
+              <button id="lang_call" class="btn">Call (selected lang)</button>
+            </div>
+            <div class="text-xs text-slate-600 mb-1">Voice prompt preview</div>
+            <pre id="lang_prompt" class="whitespace-pre-wrap bg-white/70 rounded-xl p-3 text-sm"></pre>
+          </div>
         </div>
+
         <div>
           <h3 class="text-lg font-semibold mb-3">Send WhatsApp</h3>
           <div class="flex items-center gap-2">
@@ -166,6 +191,49 @@
           </div>
           <p class="text-xs text-slate-600 mt-2">From your sandbox number <code>whatsapp:+14155238886</code>.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- NEW: AI Decisions + Blockchain -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="card">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-semibold">Twin-tower + Bandit (live)</h3>
+          <span class="text-xs text-slate-600">ε-greedy with UCB bonus</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="table-head">
+              <tr>
+                <th class="text-left p-2">Arm</th>
+                <th class="text-left p-2">n</th>
+                <th class="text-left p-2">r</th>
+              </tr>
+            </thead>
+            <tbody id="bandit_rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-semibold">Blockchain Proofs</h3>
+          <span id="chain_mode" class="pill">—</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="table-head">
+              <tr>
+                <th class="text-left p-2">When</th>
+                <th class="text-left p-2">Kind</th>
+                <th class="text-left p-2">Hash</th>
+                <th class="text-left p-2">Tx</th>
+              </tr>
+            </thead>
+            <tbody id="proof_rows"></tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-600 mt-2">Updates live when a proof is stored (on-chain or file-mode).</p>
       </div>
     </section>
 
@@ -249,6 +317,17 @@
       return `<span class="badge ${map[tone]||map.gray}">${txt}</span>`;
     };
 
+    // header pills
+    const pillChain = document.getElementById('pill_chain');
+    const pillContract = document.getElementById('pill_contract');
+    const pillLang = document.getElementById('pill_lang');
+    const chainMode = document.getElementById('chain_mode');
+
+    // multilingual controls
+    const langSel = document.getElementById('lang_sel');
+    const langPrompt = document.getElementById('lang_prompt');
+    const langCallBtn = document.getElementById('lang_call');
+
     let all = [];   // all events
     let view = [];  // filtered
 
@@ -321,8 +400,7 @@
 
       for (const e of data){
         const ts = e.ts || e.recvTs || '';
-        theWho = e.from || e.callee || e.caller || '';
-        const who = theWho;
+        const theWho = e.from || e.callee || e.caller || '';
         const what = e.type==='wa_inbound' ? (e.body || '')
                    : e.type==='voice_analyze' ? `${e.intent||''}${e.speech? ' / ' + e.speech : ''}`
                    : (e.callStatus || e.CallStatus || '—');
@@ -352,16 +430,16 @@
             <td class="p-2">${typeBadge}</td>
             <td class="p-2">
               <div class="flex items-center gap-2">
-                <code class="text-slate-700">${who||'—'}</code>
-                ${who ? `<button class="text-xs px-2 py-0.5 rounded-lg border"
-                         onclick="navigator.clipboard.writeText('${who}')">Copy</button>` : ''}
+                <code class="text-slate-700">${theWho||'—'}</code>
+                ${theWho ? `<button class="text-xs px-2 py-0.5 rounded-lg border"
+                         onclick="navigator.clipboard.writeText('${theWho}')">Copy</button>` : ''}
               </div>
             </td>
             <td class="p-2">
               <div class="mb-1 truncate max-w-[42rem]">${(what||'—').replace(/</g,'&lt;')}</div>
               <div class="flex flex-wrap gap-1">${intentBadge}</div>
             </td>
-          <td class="p-2">${sentBadge||'—'}</td>
+            <td class="p-2">${sentBadge||'—'}</td>
           </tr>
         `);
       }
@@ -371,8 +449,11 @@
     let booted = false;
     function pushFeed(e){
       const line = document.createElement('li');
-      const t = e.type==='wa_inbound' ? 'whatsapp' : (e.type==='voice_analyze' ? 'voice' : 'status');
-      const txt = e.type==='wa_inbound' ? (e.body||'') : (e.intent||e.callStatus||'');
+      const t = e.type==='wa_inbound' ? 'whatsapp' : (e.type==='voice_analyze' ? 'voice' : (e.type==='proof'?'proof':'status'));
+      const txt = e.type==='wa_inbound' ? (e.body||'')
+                : e.type==='voice_analyze' ? (e.intent||'')
+                : e.type==='proof' ? ((e.tx||'').slice(0,10) + (e.tx && e.tx!=='FILE_MODE' ? '…' : ' (file)'))
+                : (e.callStatus || '');
       line.className = 'text-sm';
       line.innerHTML = `<span class="mr-2 text-slate-500">${t}</span> <span class="font-medium">${(e.from||e.caller||e.callee||'').replace('whatsapp:','')}</span> · ${txt}`;
       feed.prepend(line);
@@ -387,6 +468,8 @@
         });
         es.addEventListener('event', (ev)=>{
           const e = JSON.parse(ev.data||'{}'); all.push(e); while (all.length>1000) all.shift(); pushFeed(e); applyFilters();
+          if (e.type==='proof') { loadProofs(); } // live proofs
+          if (e.type==='rank_decision' || e.type==='interaction_outcome') { loadBandit(); }
         });
         es.onerror = ()=> { es.close(); setTimeout(connectSSE, 3000); };
       } catch { setInterval(fetchEvents, 3000); }
@@ -398,7 +481,7 @@
     }
 
     // ---- Dashboard actions ----
-    document.getElementById('btnRefresh').onclick = fetchEvents;
+    document.getElementById('btnRefresh').onclick = ()=>{ fetchEvents(); loadProofs(); loadBandit(); };
     document.getElementById('btnClear').onclick = ()=>{ qEl.value=''; fType.value=''; fIntent.value=''; fSent.value=''; applyFilters(); };
     [qEl,fType,fIntent,fSent].forEach(el=> el.addEventListener('input', applyFilters));
     document.getElementById('btnExport').onclick = ()=>{
@@ -425,6 +508,21 @@
       const to = awPhone.value.trim(); const body = awBody.value.trim(); if (!to || !body) return alert('Enter phone and message');
       const r = await fetch('/api/wa', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ to, body }) });
       const j = await r.json(); if (!j.ok) return alert('Send failed: ' + (j.error||'')); awBody.value = '';
+    };
+
+    // Multilingual preview + call
+    async function loadPromptPreview(){
+      const lang = langSel.value;
+      try{
+        const r = await fetch('/api/prompt?lang='+encodeURIComponent(lang));
+        const j = await r.json();
+        langPrompt.textContent = j.prompt || '—';
+      }catch{ langPrompt.textContent = '—'; }
+    }
+    langSel.addEventListener('change', loadPromptPreview);
+    langCallBtn.onclick = async ()=>{
+      const lang = langSel.value;
+      await fetch('/api/call',{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ lang }) });
     };
 
     // ---- Campaign UI ----
@@ -465,11 +563,73 @@
       setTimeout(refreshCampaign, 300);
     };
 
+    // ---- Chain / Bandit / Proofs ----
+    async function loadConfigPills(){
+      try{
+        const r = await fetch('/api/config'); const j = await r.json();
+        pillLang.textContent = 'Default Lang: ' + (j.defaultLang||'en');
+        pillContract.textContent = 'Contract: ' + ((j.chain?.contract||'—').slice(0,10) + (j.chain?.contract ? '…' : ''));
+        if (j.chain?.onchain){
+          pillChain.textContent = 'Chain: connected';
+          pillChain.className = 'pill border-emerald-300 bg-emerald-50 text-emerald-700';
+          chainMode.textContent = 'On-chain';
+          chainMode.className = 'pill border-emerald-300 bg-emerald-50 text-emerald-700';
+        } else {
+          pillChain.textContent = 'Chain: file-mode';
+          pillChain.className = 'pill border-amber-300 bg-amber-50 text-amber-700';
+          chainMode.textContent = 'File-mode (ledger.json)';
+          chainMode.className = 'pill border-amber-300 bg-amber-50 text-amber-700';
+        }
+      }catch{
+        pillChain.textContent='Chain: —';
+      }
+    }
+
+    async function loadProofs(){
+      try{
+        const r=await fetch('/api/ledger/tail?n=8'); const arr=await r.json();
+        const tbody=document.getElementById('proof_rows'); tbody.innerHTML='';
+        arr.slice().reverse().forEach(p=>{
+          const tx = p.tx ? (p.tx==='FILE_MODE' ? 'FILE_MODE (file)' : (p.tx.slice(0,12)+'…')) : '';
+          tbody.insertAdjacentHTML('beforeend', `
+            <tr class="border-b">
+              <td class="p-2 text-sm">${rel(p.ts)}</td>
+              <td class="p-2 text-sm">${p.type||p.kind}</td>
+              <td class="p-2 text-sm mono">${(p.hash||'').slice(0,12)}…</td>
+              <td class="p-2 text-sm mono">${tx}</td>
+            </tr>`);
+        });
+      }catch{}
+    }
+
+    async function loadBandit(){
+      try{
+        const r=await fetch('/api/bandit'); const obj=await r.json();
+        const tbody=document.getElementById('bandit_rows'); tbody.innerHTML='';
+        Object.entries(obj).sort((a,b)=>(b[1]?.n||0)-(a[1]?.n||0)).forEach(([k,v])=>{
+          tbody.insertAdjacentHTML('beforeend', `
+            <tr class="border-b">
+              <td class="p-2 mono">${k}</td>
+              <td class="p-2 mono">${v?.n||0}</td>
+              <td class="p-2 mono">${v?.r||0}</td>
+            </tr>`);
+        });
+      }catch{}
+    }
+
     // init
-    connectSSE();
-    setTimeout(()=>{ if (!booted) fetchEvents(); }, 1500);
-    setInterval(refreshCampaign, 3000);
-    window.addEventListener('load', ()=> { lucide.createIcons(); refreshCampaign(); });
+    function init(){
+      connectSSE();
+      setTimeout(()=>{ if (!booted) fetchEvents(); }, 1500);
+      setInterval(refreshCampaign, 3000);
+      window.addEventListener('load', ()=> { lucide.createIcons(); refreshCampaign(); });
+
+      loadConfigPills();
+      loadPromptPreview();
+      loadProofs();
+      loadBandit();
+    }
+    init();
   </script>
 </body>
 </html>
