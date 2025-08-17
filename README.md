@@ -21,7 +21,7 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 ---
 
 ## 🖼️ Screenshots (stacked / vertical)
-> Place the image files under `public/` or repo root. This README uses the exact filename you uploaded: `screenshot_chain.png`.
+
 
 <p align="center">
   <img src="screenshot_dashboard.png" alt="Dashboard" width="900" />
@@ -90,7 +90,7 @@ BANDIT_EXPLORATION=0.1
 # LEDGER_PATH=./data/ledger.json
 ```
 
-> **Important:** Do **not** commit `.env`. Ensure `.gitignore` includes `.env`.
+
 
 ### 3) Install dependencies
 (adapt if your repo uses different folder names)
@@ -190,7 +190,7 @@ https://<ngrok-id>.ngrok.io/voice
 ---
 
 ## 📊 Workflow (high-level)
-> This **Mermaid** block is valid and GitHub-friendly. I removed non-ASCII dashes and problematic characters and kept labels simple to avoid parser errors.
+
 
 ```mermaid
 flowchart LR
@@ -207,7 +207,6 @@ flowchart LR
   Ledger --> Analytics["Dashboard and Audit"]
 ```
 
-> If GitHub preview still shows *"Unable to render rich display"*, that is a renderer issue in your viewer or GitHub environment. The mermaid block above is syntactically valid for GitHub's supported mermaid syntax. If needed, enable GitHub's mermaid preview or use a browser mermaid extension. (No special unicode or non-ASCII characters are present in the block.)
 
 ---
 
