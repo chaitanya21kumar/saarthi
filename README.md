@@ -22,18 +22,21 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 
 ## 🖼️ Screenshots (stacked / vertical)
 
-
+### Dashboard — Agentic Collections overview (intents, sentiment, campaign status)
 <p align="center">
-  <img src="screenshot_dashboard.png" alt="Dashboard" width="900" />
+  <img src="screenshot_dashboard.png" alt="Dashboard — intents, sentiment, campaign status" width="900" />
 </p>
 
+### Campaign — live timeline, notes & controls
 <p align="center">
-  <img src="screenshot_campaign.png" alt="Campaign" width="900" />
+  <img src="screenshot_campaign.png" alt="Campaign — live timeline, notes and controls" width="900" />
 </p>
 
+### Twin-tower + Bandit (live) & Blockchain proofs — file-mode `ledger.json`
 <p align="center">
-  <img src="screenshot_chain.png" alt="Twin-tower + Bandit live & ledger" width="900" />
+  <img src="screenshot_chain.png" alt="Twin-tower + Bandit (live) and Blockchain proofs (file-mode ledger.json)" width="900" />
 </p>
+
 
 ---
 
