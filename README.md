@@ -20,6 +20,15 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 
 ---
 
+---
+
+## 🎥 Demo
+
+[▶️ Watch the demo on YouTube](https://youtu.be/eYR_YPnh0v0)
+
+
+---
+
 ## 🖼️ Screenshots (stacked / vertical)
 
 ### Dashboard — Agentic Collections overview (intents, sentiment, campaign status)
@@ -36,6 +45,12 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 <p align="center">
   <img src="screenshot_chain.png" alt="Twin-tower + Bandit (live) and Blockchain proofs (file-mode ledger.json)" width="900" />
 </p>
+
+### WhatsApp — pay link, agent assist & extension flow
+<p align="center">
+  <img src="screenshot_whatsapp.png" alt="WhatsApp — pay link, agent assist & extension flow" width="900" />
+</p>
+
 
 
 ---
