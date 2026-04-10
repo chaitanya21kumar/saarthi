@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saarthi - Contact Center CRM</title>
+    <title>Saarthi – Contact Center CRM Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
@@ -13,508 +13,408 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #64748b;
+            --border: #e2e8f0;
+            --border-dark: #cbd5e1;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border: #1e293b;
+            --border-dark: #334155;
+        }
+
+        html, body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: 64px 1fr;
         }
 
         /* ===== HEADER ===== */
         .header {
-            background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1.5rem 2rem;
-            position: sticky;
-            top: 0;
+            grid-column: 1 / -1;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             z-index: 100;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        .header-content {
-            max-width: 1600px;
-            margin: 0 auto;
+        .header-left {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 2rem;
+            flex: 1;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.5px;
         }
 
-        .status-badge {
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .status-chip {
+            padding: 0.375rem 0.875rem;
+            background: #ecfdf5;
+            color: #166534;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #ecfdf5;
-            color: #059669;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
+            width: 6px;
+            height: 6px;
+            background: #16a34a;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.4; }
         }
 
-        /* ===== MAIN CONTENT ===== */
-        .container {
-            flex: 1;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 2rem;
-            width: 100%;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .section-title:first-child {
-            margin-top: 0;
-        }
-
-        /* ===== METRICS GRID ===== */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .metric-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .metric-card:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .metric-label {
-            font-size: 0.875rem;
-            color: #64748b;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
-        }
-
-        .metric-value {
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-change {
-            font-size: 0.875rem;
-            font-weight: 500;
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            color: #10b981;
+            gap: 1rem;
         }
 
-        /* ===== CAMPAIGN CONTROL CENTER ===== */
-        .campaign-control {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .campaign-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .campaign-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .campaign-status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .campaign-status-badge.running {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .campaign-status-badge.stopped {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-dot-small {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .status-dot-small.running {
-            background: #10b981;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot-small.stopped {
-            background: #ef4444;
-        }
-
-        .campaign-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .campaign-stat-box {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            padding: 1.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #3b82f6;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-detail {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .next-customer {
-            background: #f0f9ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .next-customer-name {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 0.5rem;
-        }
-
-        .next-customer-detail {
-            font-size: 0.875rem;
-            color: #1e40af;
-            margin-bottom: 0.5rem;
-        }
-
-        .next-customer-priority {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #3b82f6;
-        }
-
-        /* ===== ACTION CENTER ===== */
-        .action-center {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .action-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 1.5rem;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .action-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 1.5rem;
-            background: #f8fafc;
-        }
-
-        .action-card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .action-card-description {
-            font-size: 0.875rem;
-            color: #64748b;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 0.75rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #475569;
-            margin-bottom: 0.38rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            transition: border 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-textarea {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            resize: vertical;
-            min-height: 80px;
-            transition: border 0.2s;
-        }
-
-        .form-textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn-group {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: 1px solid #e2e8f0;
-            background: #ffffff;
-            color: #1e293b;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s;
-            flex: 1;
-            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 18px;
+            height: 18px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            grid-row: 2;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
             gap: 0.5rem;
         }
 
-        .btn:hover {
-            border-color: #3b82f6;
-            background: #f0f9ff;
-            color: #3b82f6;
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            padding: 0 1rem 0.5rem;
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            border: none;
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.1), transparent);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
         }
 
-        .btn-primary:disabled {
-            background: #cbd5e1;
-            opacity: 1;
+        .nav-item-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
         }
 
-        .btn-danger {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            grid-row: 2;
+            grid-column: 2;
+            overflow-y: auto;
+            background: var(--bg-secondary);
         }
 
-        .btn-danger:hover {
-            background: #fecaca;
+        .page {
+            display: none;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            animation: fadeIn 0.2s;
         }
 
-        .btn-success {
-            background: #dcfce7;
-            color: #166534;
-            border: 1px solid #bbf7d0;
+        .page.active {
+            display: block;
         }
 
-        .btn-success:hover {
-            background: #bbf7d0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== CHARTS ===== */
-        .charts-grid {
+        /* ===== TYPOGRAPHY ===== */
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* ===== CARDS & LAYOUTS ===== */
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .chart-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+        .kpi-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .chart-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .chart-container {
             position: relative;
-            height: 280px;
-        }
-
-        /* ===== TABLE ===== */
-        .data-table {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
         }
 
-        .table-header {
-            background: #f1f5f9;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1rem 1.5rem;
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1.5fr 2fr 1fr 1fr;
-            gap: 1rem;
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
             font-weight: 600;
-            font-size: 0.875rem;
-            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
         }
 
-        .table-row {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1.5fr 2fr 1fr 1fr;
-            gap: 1rem;
-            align-items: center;
-            transition: background 0.2s;
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1;
         }
 
-        .table-row:hover {
-            background: #f8fafc;
-        }
-
-        .table-row:last-child {
-            border-bottom: none;
-        }
-
-        .customer-name {
+        .kpi-trend {
+            font-size: 0.85rem;
             font-weight: 600;
-            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
-        .customer-phone {
-            font-size: 0.875rem;
-            color: #64748b;
+        .kpi-trend.positive {
+            color: var(--success);
         }
 
+        .kpi-trend.negative {
+            color: var(--danger);
+        }
+
+        /* ===== BADGES & CHIPS ===== */
         .badge {
-            display: inline-block;
-            padding: 0.375rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.85rem;
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-align: center;
+            white-space: nowrap;
         }
 
         .badge-success {
@@ -524,7 +424,7 @@
 
         .badge-warning {
             background: #fef3c7;
-            color: #b45309;
+            color: #92400e;
         }
 
         .badge-danger {
@@ -537,672 +437,979 @@
             color: #1e40af;
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            background: #0f172a;
-            color: #cbd5e1;
-            padding: 3rem 2rem;
-            border-top: 1px solid #1e293b;
-            margin-top: auto;
+        .badge-coming {
+            background: #ede9fe;
+            color: #6d28d9;
         }
 
-        .footer-content {
-            max-width: 1600px;
-            margin: 0 auto;
+        /* ===== TABLES ===== */
+        .table-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 1rem;
-        }
-
-        .footer-link {
-            display: block;
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover {
-            color: #3b82f6;
-        }
-
-        .footer-divider {
-            border-top: 1px solid #1e293b;
-            margin: 2rem 0;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 0.9rem;
         }
 
-        .footer-logo {
-            font-size: 1.25rem;
+        .table thead {
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
             font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
         }
 
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
+        .table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
         }
 
-        .footer-links a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.2s;
+        .table tbody tr:hover {
+            background: var(--bg-tertiary);
         }
 
-        .footer-links a:hover {
-            color: #3b82f6;
+        .table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            padding: 1rem;
-            margin-bottom: 1rem;
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
             border-radius: 8px;
-            font-size: 0.95rem;
-            display: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .notification.show {
-            display: block;
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        .notification-success {
-            background: #dcfce7;
-            color: #166534;
-            border: 1px solid #bbf7d0;
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .notification-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* ===== CHARTS ===== */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .chart-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .metrics-grid {
+        @media (max-width: 1024px) {
+            body {
                 grid-template-columns: 1fr;
             }
 
-            .charts-grid {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                grid-column: 1;
+            }
+
+            .kpi-grid {
                 grid-template-columns: 1fr;
             }
 
-            .table-header,
-            .table-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 0.5rem;
-            }
-
-            .campaign-grid {
+            .chart-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .action-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                flex: 1;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                align-items: flex-start;
             }
         }
 
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 1rem;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .page {
+                padding: 1rem;
+            }
+
+            .kpi-value {
+                font-size: 1.875rem;
+            }
+
+            .table {
+                font-size: 0.8rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
         }
     </style>
 </head>
 <body>
     <!-- HEADER -->
     <div class="header">
-        <div class="header-content">
+        <div class="header-left">
             <div class="logo">Saarthi</div>
-            <div class="status-badge">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search customers, calls, FAQs...">
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-chip">
                 <span class="status-dot"></span>
-                Live System
+                System Live
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn">🔔
+                    <div class="notification-badge">3</div>
+                </button>
+                <button class="icon-btn">⚙️</button>
+                <div class="user-menu">
+                    <div class="user-avatar">A</div>
+                    <div class="user-name">Agent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Main</div>
+            <div class="nav-item active" onclick="showPage('dashboard')">
+                <div class="nav-item-icon">📊</div>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="showPage('customers')">
+                <div class="nav-item-icon">👥</div>
+                <span>Customers</span>
+            </div>
+            <div class="nav-item" onclick="showPage('calls')">
+                <div class="nav-item-icon">📞</div>
+                <span>Call Queue</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Engagement</div>
+            <div class="nav-item" onclick="showPage('conversations')">
+                <div class="nav-item-icon">💬</div>
+                <span>Conversations</span>
+            </div>
+            <div class="nav-item" onclick="showPage('reminders')">
+                <div class="nav-item-icon">🔔</div>
+                <span>Reminders</span>
+            </div>
+            <div class="nav-item" onclick="showPage('faq')">
+                <div class="nav-item-icon">❓</div>
+                <span>FAQ & KB</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Insights</div>
+            <div class="nav-item" onclick="showPage('analytics')">
+                <div class="nav-item-icon">📈</div>
+                <span>Analytics</span>
+            </div>
+            <div class="nav-item" onclick="showPage('settings')">
+                <div class="nav-item-icon">⚙️</div>
+                <span>Settings</span>
             </div>
         </div>
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="container">
-        <!-- NOTIFICATION -->
-        <div id="notification" class="notification"></div>
+    <div class="main">
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboard-page" class="page active">
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle">Overview of your contact center operations</div>
 
-        <!-- DASHBOARD METRICS -->
-        <div class="section-title">Dashboard</div>
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-label">Active Contacts</div>
-                <div class="metric-value" id="totalContacts">847</div>
-                <div class="metric-change">↑ 12% this month</div>
+            <!-- KPI CARDS -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Contacts</div>
+                    <div class="kpi-value" id="kpi-contacts">847</div>
+                    <div class="kpi-trend positive">↑ 12% vs last week</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Calls Today</div>
+                    <div class="kpi-value" id="kpi-calls">342</div>
+                    <div class="kpi-trend positive">↑ 8% vs yesterday</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Call Success Rate</div>
+                    <div class="kpi-value">78%</div>
+                    <div class="kpi-trend positive">↑ 3% vs target</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Pending Follow-ups</div>
+                    <div class="kpi-value" id="kpi-followups">92</div>
+                    <div class="kpi-trend negative">↑ 5 overdue</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Call Duration</div>
+                    <div class="kpi-value">4.2m</div>
+                    <div class="kpi-trend positive">↓ -0.3m optimal</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Collections Rate</div>
+                    <div class="kpi-value">68%</div>
+                    <div class="kpi-trend positive">↑ 2% this week</div>
+                </div>
             </div>
-            <div class="metric-card">
-                <div class="metric-label">Calls Today</div>
-                <div class="metric-value" id="callsToday">342</div>
-                <div class="metric-change">↑ 8% vs yesterday</div>
+
+            <!-- NEXT BEST ACTION -->
+            <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%); border: 2px solid var(--primary); border-radius: 12px; padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <span style="font-size: 2rem;">🤖</span>
+                    <div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">AI-Powered Next Best Action</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Recommended priority customer to engage right now</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600;">CUSTOMER NAME</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Rajesh Patel</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">+91 98765 43210</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600;">RECOMMENDED ACTION</div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">📞 Voice Call</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Due in 2 hours</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600;">PRIORITY SCORE</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: var(--warning);">9.2/10</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">High intent signal</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600;">COLLECTION RISK</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--danger);">HIGH</div>
+                            <span class="badge badge-danger">Due</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="initiateCall('rajesh-patel')">📞 Call Now</button>
+                    <button class="btn btn-secondary">📧 View Profile</button>
+                </div>
             </div>
-            <div class="metric-card">
-                <div class="metric-label">Resolutions</div>
-                <div class="metric-value" id="resolutionCount">184</div>
-                <div class="metric-change">✓ 78% success</div>
+
+            <!-- CHARTS -->
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Call Outcomes Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="outcomeChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Sentiment Analysis</div>
+                    <div class="chart-container">
+                        <canvas id="sentimentChart"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="metric-card">
-                <div class="metric-label">Collection Rate</div>
-                <div class="metric-value">68%</div>
-                <div class="metric-change">↑ 3% this week</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Avg Call Duration</div>
-                <div class="metric-value">4.2m</div>
-                <div class="metric-change">↓ -0.3m vs avg</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Follow-ups Pending</div>
-                <div class="metric-value" id="followupCount">92</div>
-                <div class="metric-change">→ Scheduled</div>
+
+            <!-- RECENT INTERACTIONS -->
+            <div class="section-title">📋 Recent Interactions</div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Channel</th>
+                            <th>Outcome</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Priya Sharma</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">+91 98712 34567</div>
+                            </td>
+                            <td><span class="badge badge-info">Voice Call</span></td>
+                            <td>Payment Confirmed</td>
+                            <td><span class="badge badge-success">Resolved</span></td>
+                            <td>2:45 PM</td>
+                            <td><button class="btn btn-sm btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Amit Kumar</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">+91 92345 67890</div>
+                            </td>
+                            <td><span class="badge badge-info">WhatsApp</span></td>
+                            <td>Requested Extension</td>
+                            <td><span class="badge badge-warning">Follow-up</span></td>
+                            <td>2:32 PM</td>
+                            <td><button class="btn btn-sm btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Deepak Singh</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">+91 98901 23456</div>
+                            </td>
+                            <td><span class="badge badge-info">Voice Call</span></td>
+                            <td>Payment Arranged</td>
+                            <td><span class="badge badge-success">Resolved</span></td>
+                            <td>2:18 PM</td>
+                            <td><button class="btn btn-sm btn-secondary">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- CAMPAIGN CONTROL CENTER -->
-        <div class="section-title">Campaign Control Center</div>
-        <div class="campaign-control">
-            <div class="campaign-header">
-                <div class="campaign-title">Recovery Drive Campaign</div>
-                <div class="campaign-status-badge" id="campaignStatus">
-                    <span class="status-dot-small stopped"></span>
-                    Not Running
-                </div>
+        <!-- CUSTOMERS PAGE -->
+        <div id="customers-page" class="page">
+            <div class="page-title">Customers</div>
+            <div class="page-subtitle">Manage and track all customer interactions and accounts</div>
+
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                <input type="text" class="search-input" style="flex: 1; max-width: none; padding: 0.75rem 1rem;" placeholder="Filter customers...">
+                <button class="btn btn-primary">+ Add Customer</button>
             </div>
 
-            <div class="campaign-grid">
-                <div class="campaign-stat-box">
-                    <div class="stat-label">Total Queue</div>
-                    <div class="stat-value" id="queueTotal">342</div>
-                    <div class="stat-detail">Customers waiting</div>
-                </div>
-                <div class="campaign-stat-box">
-                    <div class="stat-label">Queued</div>
-                    <div class="stat-value" id="queueQueued">124</div>
-                    <div class="stat-detail">Ready to call</div>
-                </div>
-                <div class="campaign-stat-box">
-                    <div class="stat-label">Called</div>
-                    <div class="stat-value" id="queueCalled">156</div>
-                    <div class="stat-detail">In progress</div>
-                </div>
-                <div class="campaign-stat-box">
-                    <div class="stat-label">Completed</div>
-                    <div class="stat-value" id="queueDone">62</div>
-                    <div class="stat-detail">Finished</div>
-                </div>
-            </div>
-
-            <div class="next-customer" id="nextCustomerBox" style="display:none;">
-                <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 0.75rem;">Next Customer to Call</div>
-                <div class="next-customer-name" id="nextCustomerName">—</div>
-                <div class="next-customer-detail">Phone: <span id="nextCustomerPhone">—</span></div>
-                <div class="next-customer-detail">Due: <span id="nextCustomerDue">—</span></div>
-                <div class="next-customer-detail">Amount: <span id="nextCustomerAmount">—</span></div>
-                <div class="next-customer-priority">Priority Score: <span id="nextCustomerScore">0</span></div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-success" id="startCampaignBtn" onclick="startCampaign()">▶ Start Campaign</button>
-                <button class="btn btn-danger" id="stopCampaignBtn" onclick="stopCampaign()" disabled>⏹ Stop Campaign</button>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Due Amount</th>
+                            <th>Last Contact</th>
+                            <th>Next Action</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Rajesh Patel</strong></td>
+                            <td>+91 98765 43210</td>
+                            <td><span class="badge badge-danger" style="color: var(--danger);"><strong>🔴 URGENT</strong></span></td>
+                            <td><span class="badge badge-danger">Overdue</span></td>
+                            <td><strong>₹12,500</strong></td>
+                            <td>3 days ago</td>
+                            <td>Call + WhatsApp</td>
+                            <td><button class="btn btn-sm btn-primary">Contact</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Priya Sharma</strong></td>
+                            <td>+91 98712 34567</td>
+                            <td><span class="badge badge-warning">HIGH</span></td>
+                            <td><span class="badge badge-success">Resolved</span></td>
+                            <td>₹0</td>
+                            <td>Yesterday</td>
+                            <td>Follow-up</td>
+                            <td><button class="btn btn-sm btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Amit Kumar</strong></td>
+                            <td>+91 92345 67890</td>
+                            <td><span class="badge badge-info">MEDIUM</span></td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td>₹8,300</td>
+                            <td>1 day ago</td>
+                            <td>SMS Reminder</td>
+                            <td><button class="btn btn-sm btn-secondary">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- ACTION CENTER -->
-        <div class="section-title">Multi-Channel Actions</div>
-        <div class="action-center">
-            <div class="action-grid">
-                <!-- MANUAL CALL -->
-                <div class="action-card">
-                    <div class="action-card-title">📞 Make Voice Call</div>
-                    <div class="action-card-description">Initiate a direct voice call to customer</div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" id="callPhoneInput" class="form-input" placeholder="+91 XXXXX XXXXX" />
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="makeCall()">Call Now</button>
-                    </div>
-                </div>
+        <!-- CALL QUEUE PAGE -->
+        <div id="calls-page" class="page">
+            <div class="page-title">Call Queue Management</div>
+            <div class="page-subtitle">Queue status and call workflow</div>
 
-                <!-- SEND WHATSAPP -->
-                <div class="action-card">
-                    <div class="action-card-title">💬 Send WhatsApp Message</div>
-                    <div class="action-card-description">Send message via WhatsApp Sandbox</div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" id="waPhoneInput" class="form-input" placeholder="+91 XXXXX XXXXX" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Message</label>
-                        <textarea id="waMessageInput" class="form-textarea" placeholder="Type your message..."></textarea>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="sendWhatsApp()">Send Message</button>
-                    </div>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Queue Length</div>
+                    <div class="kpi-value">24</div>
+                    <div class="kpi-trend">Calls waiting</div>
                 </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Wait Time</div>
+                    <div class="kpi-value">3.2m</div>
+                    <div class="kpi-trend positive">↓ Below target</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Agents</div>
+                    <div class="kpi-value">8/10</div>
+                    <div class="kpi-trend">2 on break</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Abandoned Rate</div>
+                    <div class="kpi-value">2.1%</div>
+                    <div class="kpi-trend positive">↓ Lower is better</div>
+                </div>
+            </div>
 
-                <!-- AGENT NOTES -->
-                <div class="action-card">
-                    <div class="action-card-title">📝 Log Agent Action</div>
-                    <div class="action-card-description">Document interaction or decision</div>
-                    <div class="form-group">
-                        <label class="form-label">Customer Phone</label>
-                        <input type="tel" id="notePhoneInput" class="form-input" placeholder="+91 XXXXX XXXXX" />
+            <div class="section-title">🎯 Current Queue</div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Customer</th>
+                            <th>Reason</th>
+                            <th>Wait Time</th>
+                            <th>Priority</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Rajesh Patel</strong> • +91 98765 43210</td>
+                            <td>Payment Discussion</td>
+                            <td><strong>8:23</strong></td>
+                            <td><span class="badge badge-danger">URGENT</span></td>
+                            <td><button class="btn btn-sm btn-primary">Assign</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Meera Nair</strong> • +91 97654 32109</td>
+                            <td>Extension Request</td>
+                            <td><strong>5:12</strong></td>
+                            <td><span class="badge badge-warning">HIGH</span></td>
+                            <td><button class="btn btn-sm btn-primary">Assign</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-title">📞 Call Scripts</div>
+            <div class="card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 8px; border-left: 3px solid var(--primary);">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">Collection Script</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Use for overdue invoices and payment collections</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Action Notes</label>
-                        <textarea id="noteInput" class="form-textarea" placeholder="Document the interaction..."></textarea>
+                    <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 8px; border-left: 3px solid var(--accent);">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">Extension Script</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">For customers requesting payment deadline extension</div>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="logAgentNote()">Save Note</button>
+                    <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 8px; border-left: 3px solid var(--success);">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">Closure Script</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Use when customer has resolved their account</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ANALYTICS -->
-        <div class="section-title">Analytics</div>
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">Outcome Distribution</div>
-                <div class="chart-container">
-                    <canvas id="outcomeChart"></canvas>
+        <!-- CONVERSATIONS PAGE -->
+        <div id="conversations-page" class="page">
+            <div class="page-title">Conversations</div>
+            <div class="page-subtitle">Track voice calls and WhatsApp interactions</div>
+
+            <div style="text-align: center; padding: 3rem 2rem; background: var(--bg-primary); border-radius: 12px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">All Conversations</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">View call recordings, WhatsApp threads, and interaction history</p>
+                <button class="btn btn-primary">🎙️ Start New Call</button>
+            </div>
+        </div>
+
+        <!-- REMINDERS PAGE -->
+        <div id="reminders-page" class="page">
+            <div class="page-title">Follow-up Reminders</div>
+            <div class="page-subtitle">Manage scheduled follow-ups and customer reminders</div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Due Today</div>
+                    <div class="kpi-value">12</div>
+                    <div class="kpi-trend negative">Action needed</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Overdue</div>
+                    <div class="kpi-value">5</div>
+                    <div class="kpi-trend negative">⚠️ Critical</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">This Week</div>
+                    <div class="kpi-value">28</div>
+                    <div class="kpi-trend">Scheduled</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Completion Rate</div>
+                    <div class="kpi-value">83%</div>
+                    <div class="kpi-trend positive">↑ Excellent</div>
                 </div>
             </div>
-            <div class="chart-card">
-                <div class="chart-title">Sentiment Analysis</div>
-                <div class="chart-container">
-                    <canvas id="sentimentChart"></canvas>
+
+            <div class="section-title">🚨 Overdue Reminders</div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Type</th>
+                            <th>Due Date</th>
+                            <th>Days Overdue</th>
+                            <th>Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Rajesh Patel</strong></td>
+                            <td><span class="badge badge-danger">Payment Call</span></td>
+                            <td>Apr 6, 2026</td>
+                            <td><strong style="color: var(--danger);">4 days</strong></td>
+                            <td>Follow collection discussion</td>
+                            <td><button class="btn btn-sm btn-danger">Execute Now</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vikram Singh</strong></td>
+                            <td><span class="badge badge-warning">Extension Check</span></td>
+                            <td>Apr 7, 2026</td>
+                            <td><strong style="color: var(--danger);">3 days</strong></td>
+                            <td>Verify if extension approved</td>
+                            <td><button class="btn btn-sm btn-danger">Execute Now</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FAQ PAGE -->
+        <div id="faq-page" class="page">
+            <div class="page-title">FAQ & Knowledge Base</div>
+            <div class="page-subtitle">AI-assisted responses and customer support articles</div>
+
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                <input type="text" class="search-input" style="flex: 1; max-width: none; padding: 0.75rem 1rem;" placeholder="Search knowledge base...">
+                <button class="btn btn-primary">+ Add Article</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem;">How do I request a payment extension?</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Collections • Last updated 2 days ago</div>
+                        </div>
+                        <span class="badge badge-success">AI Drafted</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        You can request a payment extension by contacting our support team. We offer flexible payment options...
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="btn btn-sm btn-secondary">Edit</button>
+                        <button class="btn btn-sm btn-secondary">View Analytics</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem;">What are your payment methods?</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Billing • Last updated 5 days ago</div>
+                        </div>
+                        <span class="badge badge-coming">COMING SOON</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        We accept multiple payment methods including credit cards, bank transfers, and digital wallets...
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="btn btn-sm btn-secondary">Edit</button>
+                        <button class="btn btn-sm btn-secondary">View Analytics</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem;">What if I missed a payment?</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Collections • Last updated 1 week ago</div>
+                        </div>
+                        <span class="badge badge-success">In Use</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        Don't worry. You can catch up on missed payments. Please contact us immediately to discuss options...
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="btn btn-sm btn-secondary">Edit</button>
+                        <button class="btn btn-sm btn-secondary">View Analytics</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- INTERACTION HISTORY -->
-        <div class="section-title">Recent Interactions</div>
-        <div class="data-table">
-            <div class="table-header">
-                <div>Customer</div>
-                <div>Channel</div>
-                <div>Type</div>
-                <div>Outcome</div>
-                <div>Status</div>
-                <div>Time</div>
-            </div>
-            <div class="table-row">
-                <div>
-                    <div class="customer-name">Priya Sharma</div>
-                    <div class="customer-phone">+91 98712 34567</div>
+        <!-- ANALYTICS PAGE -->
+        <div id="analytics-page" class="page">
+            <div class="page-title">Analytics & Reporting</div>
+            <div class="page-subtitle">Performance metrics and insights</div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Call Success Rate</div>
+                    <div class="kpi-value">78%</div>
+                    <div class="kpi-trend positive">↑ 3% vs target</div>
                 </div>
-                <div><span class="badge badge-info">Voice</span></div>
-                <div><span class="badge badge-success">Call</span></div>
-                <div>Payment confirmed</div>
-                <div><span class="badge badge-success">Resolved</span></div>
-                <div class="time-cell">2:45 PM</div>
-            </div>
-            <div class="table-row">
-                <div>
-                    <div class="customer-name">Amit Kumar</div>
-                    <div class="customer-phone">+91 92345 67890</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Collections Amount</div>
+                    <div class="kpi-value">₹2.4L</div>
+                    <div class="kpi-trend positive">↑ ₹45k this week</div>
                 </div>
-                <div><span class="badge badge-info">WhatsApp</span></div>
-                <div><span class="badge badge-warning">Message</span></div>
-                <div>Requested extension</div>
-                <div><span class="badge badge-warning">Needs Time</span></div>
-                <div class="time-cell">2:32 PM</div>
-            </div>
-            <div class="table-row">
-                <div>
-                    <div class="customer-name">Deepak Singh</div>
-                    <div class="customer-phone">+91 98901 23456</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Agent Productivity</div>
+                    <div class="kpi-value">8.6/10</div>
+                    <div class="kpi-trend positive">↑ 0.4 vs last week</div>
                 </div>
-                <div><span class="badge badge-info">Voice</span></div>
-                <div><span class="badge badge-success">Call</span></div>
-                <div>Payment arranged</div>
-                <div><span class="badge badge-success">Resolved</span></div>
-                <div class="time-cell">2:18 PM</div>
-            </div>
-            <div class="table-row">
-                <div>
-                    <div class="customer-name">Neha Patel</div>
-                    <div class="customer-phone">+91 94567 89012</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Customer Satisfaction</div>
+                    <div class="kpi-value">4.2/5</div>
+                    <div class="kpi-trend positive">Based on 142 surveys</div>
                 </div>
-                <div><span class="badge badge-info">WhatsApp</span></div>
-                <div><span class="badge badge-danger">Check</span></div>
-                <div>Not interested</div>
-                <div><span class="badge badge-danger">Escalate</span></div>
-                <div class="time-cell">2:05 PM</div>
             </div>
-            <div class="table-row">
-                <div>
-                    <div class="customer-name">Rohan Verma</div>
-                    <div class="customer-phone">+91 91234 56789</div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Daily Call Volume</div>
+                    <div class="chart-container">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
                 </div>
-                <div><span class="badge badge-info">Voice</span></div>
-                <div><span class="badge badge-success">Call</span></div>
-                <div>Appointment confirmed</div>
-                <div><span class="badge badge-success">Resolved</span></div>
-                <div class="time-cell">1:52 PM</div>
+                <div class="chart-card">
+                    <div class="chart-title">Resolution by Agent</div>
+                    <div class="chart-container">
+                        <canvas id="agentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="settings-page" class="page">
+            <div class="page-title">Settings & Configuration</div>
+            <div class="page-subtitle">Manage your Saarthi platform settings</div>
+
+            <div class="section-title">📋 Reminder Templates</div>
+            <div class="card" style="margin-bottom: 2rem;">
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 0.25rem;">1-Day Payment Reminder</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">Triggered 1 day before due date</div>
+                            </div>
+                            <button class="icon-btn">✏️</button>
+                        </div>
+                    </div>
+                    <div style="padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 0.25rem;">Collection Call Script</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">Standard script for overdue accounts</div>
+                            </div>
+                            <button class="icon-btn">✏️</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 0.25rem;">Escalation Rule</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">Auto-escalate if > 30 days overdue</div>
+                            </div>
+                            <button class="icon-btn">✏️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">⚙️ Integration Status</div>
+            <div class="card">
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <div>
+                            <div style="font-weight: 600;">Twilio Voice Integration</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Call API connected</div>
+                        </div>
+                        <span class="badge badge-success">✓ Active</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <div>
+                            <div style="font-weight: 600;">WhatsApp Business API</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Messaging integration ready</div>
+                        </div>
+                        <span class="badge badge-success">✓ Active</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <div>
+                            <div style="font-weight: 600;">OpenAI Intent Detection</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">NLP model configured</div>
+                        </div>
+                        <span class="badge badge-coming">Coming Soon</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-grid">
-                <div>
-                    <div class="footer-section-title">Saarthi CRM</div>
-                    <a href="#" class="footer-link">About Saarthi</a>
-                    <a href="#" class="footer-link">Features</a>
-                    <a href="#" class="footer-link">Documentation</a>
-                    <a href="#" class="footer-link">GitHub Repository</a>
-                </div>
-                <div>
-                    <div class="footer-section-title">Features</div>
-                    <a href="#" class="footer-link">Campaign Automation</a>
-                    <a href="#" class="footer-link">Intelligent Routing</a>
-                    <a href="#" class="footer-link">Multi-Channel</a>
-                    <a href="#" class="footer-link">Real-time Analytics</a>
-                </div>
-                <div>
-                    <div class="footer-section-title">Resources</div>
-                    <a href="#" class="footer-link">API Documentation</a>
-                    <a href="#" class="footer-link">Integration Guide</a>
-                    <a href="#" class="footer-link">Support Center</a>
-                    <a href="#" class="footer-link">Community Forum</a>
-                </div>
-                <div>
-                    <div class="footer-section-title">Contact</div>
-                    <a href="mailto:support@saarthi.io" class="footer-link">support@saarthi.io</a>
-                    <a href="tel:+919999999999" class="footer-link">+91 99999 99999</a>
-                    <a href="#" class="footer-link">LinkedIn</a>
-                    <a href="#" class="footer-link">Twitter</a>
-                </div>
-            </div>
-            <div class="footer-divider"></div>
-            <div class="footer-bottom">
-                <div class="footer-logo">Saarthi</div>
-                <div style="color: #64748b;">© 2026 Saarthi Contact Center CRM. All rights reserved.</div>
-                <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Security</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <script>
         const API_BASE = 'http://localhost:4000';
 
-        // Notification Helper
-        function showNotification(message, type = 'success') {
-            const notif = document.getElementById('notification');
-            notif.textContent = message;
-            notif.className = `notification show notification-${type}`;
-            setTimeout(() => notif.classList.remove('show'), 3000);
+        // ===== NAVIGATION =====
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // Show requested page
+            document.getElementById(`${pageName}-page`)?.classList.add('active');
+
+            // Update nav item active state
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item')?.classList.add('active');
         }
 
-        // Campaign Status
-        async function updateCampaignStatus() {
-            try {
-                const res = await fetch(`${API_BASE}/api/campaign/status`);
-                const data = await res.json();
-                
-                const statusBadge = document.getElementById('campaignStatus');
-                if (data.running) {
-                    statusBadge.innerHTML = '<span class="status-dot-small running"></span> Running';
-                    statusBadge.className = 'campaign-status-badge running';
-                    document.getElementById('startCampaignBtn').disabled = true;
-                    document.getElementById('stopCampaignBtn').disabled = false;
-                } else {
-                    statusBadge.innerHTML = '<span class="status-dot-small stopped"></span> Not Running';
-                    statusBadge.className = 'campaign-status-badge stopped';
-                    document.getElementById('startCampaignBtn').disabled = false;
-                    document.getElementById('stopCampaignBtn').disabled = true;
+        // ===== CHARTS =====
+        if (document.getElementById('outcomeChart')) {
+            new Chart(document.getElementById('outcomeChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Will Pay', 'Needs Time', 'Cannot Pay', 'Other'],
+                    datasets: [{
+                        data: [184, 92, 51, 15],
+                        backgroundColor: ['#16a34a', '#d97706', '#dc2626', '#7c3aed'],
+                        borderColor: 'var(--bg-primary)',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12, family: "'Inter', sans-serif" },
+                                padding: 20,
+                                color: 'var(--text-secondary)'
+                            }
+                        }
+                    }
                 }
+            });
+        }
 
-                document.getElementById('queueTotal').textContent = data.counts.total;
-                document.getElementById('queueQueued').textContent = data.counts.queued;
-                document.getElementById('queueCalled').textContent = data.counts.called;
-                document.getElementById('queueDone').textContent = data.counts.done;
-
-                if (data.next) {
-                    document.getElementById('nextCustomerBox').style.display = 'block';
-                    document.getElementById('nextCustomerName').textContent = data.next.name;
-                    document.getElementById('nextCustomerPhone').textContent = data.next.phone;
-                    document.getElementById('nextCustomerDue').textContent = data.next.due_date || '—';
-                    document.getElementById('nextCustomerAmount').textContent = '₹' + (data.next.amount || 0);
-                    document.getElementById('nextCustomerScore').textContent = (data.next.score || 0).toFixed(2);
+        if (document.getElementById('sentimentChart')) {
+            new Chart(document.getElementById('sentimentChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Positive', 'Neutral', 'Negative'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [214, 95, 33],
+                        backgroundColor: ['#16a34a', '#2563eb', '#dc2626'],
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'x',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'var(--border)' },
+                            ticks: { color: 'var(--text-secondary)' }
+                        },
+                        x: { grid: { display: false }, ticks: { color: 'var(--text-secondary)' } }
+                    }
                 }
-            } catch (e) {
-                console.error('Error fetching campaign status:', e);
-            }
+            });
         }
 
-        // Actions
-        async function startCampaign() {
-            try {
-                const res = await fetch(`${API_BASE}/api/campaign/start`, { method: 'POST' });
-                const data = await res.json();
-                showNotification('Campaign started successfully!');
-                updateCampaignStatus();
-            } catch (e) {
-                showNotification('Error starting campaign: ' + e.message, 'error');
-            }
+        if (document.getElementById('volumeChart')) {
+            new Chart(document.getElementById('volumeChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Calls',
+                        data: [320, 350, 310, 380, 420, 280, 350],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'var(--border)' }, ticks: { color: 'var(--text-secondary)' } },
+                        x: { grid: { display: false }, ticks: { color: 'var(--text-secondary)' } }
+                    }
+                }
+            });
         }
 
-        async function stopCampaign() {
-            try {
-                const res = await fetch(`${API_BASE}/api/campaign/stop`, { method: 'POST' });
-                const data = await res.json();
-                showNotification('Campaign stopped.');
-                updateCampaignStatus();
-            } catch (e) {
-                showNotification('Error stopping campaign: ' + e.message, 'error');
-            }
+        if (document.getElementById('agentChart')) {
+            new Chart(document.getElementById('agentChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Priya', 'Amit', 'Rajesh', 'Meera', 'Vikram'],
+                    datasets: [{
+                        label: 'Resolutions',
+                        data: [42, 38, 45, 36, 39],
+                        backgroundColor: ['#2563eb', '#7c3aed', '#16a34a', '#d97706', '#dc2626'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, grid: { color: 'var(--border)' }, ticks: { color: 'var(--text-secondary)' } },
+                        y: { grid: { display: false }, ticks: { color: 'var(--text-secondary)' } }
+                    }
+                }
+            });
         }
 
-        async function makeCall() {
-            const phone = document.getElementById('callPhoneInput').value.trim();
-            if (!phone) {
-                showNotification('Please enter a phone number', 'error');
-                return;
-            }
+        // ===== REAL-TIME UPDATES =====
+        setInterval(() => {
+            document.getElementById('kpi-contacts').textContent = Math.floor(Math.random() * 100) + 800;
+            document.getElementById('kpi-calls').textContent = Math.floor(Math.random() * 80) + 300;
+            document.getElementById('kpi-followups').textContent = Math.floor(Math.random() * 30) + 80;
+        }, 3000);
+
+        async function initiateCall(customerId) {
             try {
                 const res = await fetch(`${API_BASE}/api/call`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ to: phone })
+                    body: JSON.stringify({ to: '+919876543210', customerId })
                 });
-                const data = await res.json();
-                if (data.ok) {
-                    showNotification('Call initiated! Call ID: ' + data.sid);
-                    document.getElementById('callPhoneInput').value = '';
-                } else {
-                    showNotification('Error: ' + data.error, 'error');
-                }
+                alert('Call initiated!');
             } catch (e) {
-                showNotification('Error making call: ' + e.message, 'error');
+                alert('Call failed: ' + e.message);
             }
         }
-
-        async function sendWhatsApp() {
-            const phone = document.getElementById('waPhoneInput').value.trim();
-            const message = document.getElementById('waMessageInput').value.trim();
-            if (!phone || !message) {
-                showNotification('Please enter phone and message', 'error');
-                return;
-            }
-            try {
-                const res = await fetch(`${API_BASE}/api/wa`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ to: phone, body: message })
-                });
-                const data = await res.json();
-                if (data.ok) {
-                    showNotification('WhatsApp message sent! Message ID: ' + data.sid);
-                    document.getElementById('waPhoneInput').value = '';
-                    document.getElementById('waMessageInput').value = '';
-                } else {
-                    showNotification('Error: ' + data.error, 'error');
-                }
-            } catch (e) {
-                showNotification('Error sending message: ' + e.message, 'error');
-            }
-        }
-
-        async function logAgentNote() {
-            const phone = document.getElementById('notePhoneInput').value.trim();
-            const note = document.getElementById('noteInput').value.trim();
-            if (!phone || !note) {
-                showNotification('Please enter phone and notes', 'error');
-                return;
-            }
-            try {
-                const res = await fetch(`${API_BASE}/ingest`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type: 'agent_note', phone, note, ts: new Date().toISOString() })
-                });
-                const data = await res.json();
-                if (data.ok) {
-                    showNotification('Agent note logged successfully!');
-                    document.getElementById('notePhoneInput').value = '';
-                    document.getElementById('noteInput').value = '';
-                } else {
-                    showNotification('Error logging note', 'error');
-                }
-            } catch (e) {
-                showNotification('Error logging note: ' + e.message, 'error');
-            }
-        }
-
-        // Charts
-        const outcomeCtx = document.getElementById('outcomeChart').getContext('2d');
-        new Chart(outcomeCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Will Pay', 'Needs Time', 'Cannot Pay', 'Other'],
-                datasets: [{
-                    data: [184, 92, 51, 15],
-                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
-                    borderColor: '#ffffff',
-                    borderWidth: 2,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { size: 12, family: "'Inter', sans-serif" },
-                            padding: 20,
-                            color: '#64748b'
-                        }
-                    }
-                }
-            }
-        });
-
-        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-        new Chart(sentimentCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Positive', 'Neutral', 'Negative'],
-                datasets: [{
-                    label: 'Sentiment Count',
-                    data: [214, 95, 33],
-                    backgroundColor: ['#10b981', '#3b82f6', '#ef4444'],
-                    borderRadius: 8,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'x',
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#e2e8f0' },
-                        ticks: { color: '#64748b', font: { size: 12 } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#64748b', font: { size: 12 } }
-                    }
-                }
-            }
-        });
-
-        // Real-time metric updates
-        setInterval(() => {
-            document.getElementById('totalContacts').textContent = Math.floor(Math.random() * 100) + 820;
-            document.getElementById('callsToday').textContent = Math.floor(Math.random() * 80) + 300;
-            document.getElementById('resolutionCount').textContent = Math.floor(Math.random() * 50) + 160;
-            document.getElementById('followupCount').textContent = Math.floor(Math.random() * 40) + 80;
-        }, 3000);
-
-        // Initialize
-        updateCampaignStatus();
-        setInterval(updateCampaignStatus, 5000);
     </script>
 </body>
 </html>
