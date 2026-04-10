@@ -1,0 +1,8 @@
+[build]
+  publish = "app/frontend"
+  command = "echo 'Static HTML deployment'"
+
+[[redirects]]
+  from = "/*"
+  to = "/dashboard.html"
+  status = 200

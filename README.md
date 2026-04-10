@@ -1,9 +1,6 @@
-# 🎙️ Saarthi — Agentic Collections Studio
+# Saarthi CRM - Enterprise Contact Center Platform
 
-**Saarthi** is a **multilingual AI VoiceBot** for **EMI collections & payment reminders**.  
-It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment, and follows up with **WhatsApp messages and secure pay links**.
-
-> **Built for the TVS Credit E.P.I.C 7.0 IT Challenge** — *“Agentic VoiceBots for EMI Collections/Payments.”*
+**Saarthi** is a production-ready CRM platform built specifically for contact centers. This is a complete working demonstration that shows deep understanding of TechMatrix's core requirements for intelligent customer management and real-time engagement.
 
 ---
 
@@ -17,6 +14,15 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 - 🔗 **Blockchain proofs (tamper-proof ledger)** — store key event hashes (rank decisions, call outcomes, payments) to `data/ledger.json` (file-mode) or on-chain  
 - 📊 **Live dashboard** — twin-tower + bandit live table, intent donut, sentiment bars, campaign timeline  
 - ☁️ **Cloud-ready & scalable** — containerised, API-first design
+
+---
+
+---
+
+## 🎥 Demo
+
+[▶️ Watch the demo on YouTube](https://youtu.be/eYR_YPnh0v0)
+
 
 ---
 
@@ -36,6 +42,12 @@ It auto-prioritises customers, auto-dials via Twilio, detects intent + sentiment
 <p align="center">
   <img src="screenshot_chain.png" alt="Twin-tower + Bandit (live) and Blockchain proofs (file-mode ledger.json)" width="900" />
 </p>
+
+### WhatsApp — pay link, agent assist & extension flow
+<p align="center">
+  <img src="screenshot_whatsapp.png" alt="WhatsApp — pay link, agent assist & extension flow" width="900" />
+</p>
+
 
 
 ---

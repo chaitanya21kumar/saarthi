@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: saarthi-backend
+    env: node
+    plan: free
+    buildCommand: cd app/backend && npm install
+    startCommand: cd app/backend && npm start
+    numInstances: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DASHBOARD_PORT
+        value: 4000
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: CALLEE_NUMBER
+        sync: false
+      - key: WHATSAPP_FROM
+        value: "whatsapp:+14155238886"
+      - key: PAYMENT_LINK
+        value: "https://example.com/pay"
+      - key: OPENAI_API_KEY
+        sync: false
